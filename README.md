@@ -2,7 +2,7 @@
 #[Java Poet](https://github.com/square/javapoet) Example
 
 Use Java Library instead of Android because 
-Javax.lang.model.element.Modifier is not available on Android.
+Javax.lang.model.element.Modifier is [not available on Android](https://github.com/square/javapoet#methods).
 
 ###Create Java Module
 File > New > New Module > Java Library 
@@ -12,7 +12,7 @@ File > New > New Module > Java Library
 compile 'com.squareup:javapoet:1.7.0'
 ```
 
-###Singleton 
+#Singleton 
 
 ###Singleton Builder
 ```Java
