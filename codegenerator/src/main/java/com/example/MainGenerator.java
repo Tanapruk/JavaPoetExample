@@ -15,28 +15,29 @@ import javax.lang.model.element.Modifier;
 public class MainGenerator {
 
     public static void main(String[] args) throws IOException {
-        createSingleton("NextzySingleton0");
         createSingleton("NextzySingleton1");
         createSingleton("NextzySingleton2");
         createSingleton("NextzySingleton3");
     }
 
     public static void createSingleton(String className) throws IOException {
-        FieldSpec fieldSpec = FieldSpec.builder(ClassName.bestGuess(className), "instance")
+
+        ClassName classNameObject = ClassName.bestGuess(className);
+        FieldSpec fieldSpec = FieldSpec.builder(classNameObject, "instance")
                 .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
                 .build();
 
         MethodSpec methodSpec = MethodSpec.methodBuilder("getInstance")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(ClassName.bestGuess(className))
+                .returns(classNameObject)
                 .beginControlFlow("if (instance == null)")
-                .addCode("instance = new " + className + "();\n")
+                .addCode("instance = new $T();\n", classNameObject)
                 .endControlFlow()
 
                 .addStatement("return instance")
                 .build();
 
-        TypeSpec typeSpec = TypeSpec.classBuilder(className)
+        TypeSpec typeSpec = TypeSpec.classBuilder(classNameObject)
                 .addModifiers(Modifier.PUBLIC)
                 .addField(fieldSpec)
                 .addMethod(methodSpec)
