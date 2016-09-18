@@ -18,25 +18,26 @@ compile 'com.squareup:javapoet:1.7.0'
 ```Java
 String className = "YourSingletonName";
 
-FieldSpec fieldSpec = FieldSpec.builder(ClassName.bestGuess(className), "instance")
-        .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
-        .build();
+ ClassName classNameObject = ClassName.bestGuess(className);
+        FieldSpec fieldSpec = FieldSpec.builder(classNameObject, "instance")
+                .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                .build();
 
-MethodSpec methodSpec = MethodSpec.methodBuilder("getInstance")
-        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-        .returns(ClassName.bestGuess(className))
-        .beginControlFlow("if (instance == null)")
-        .addCode("instance = new " + className + "();\n")
-        .endControlFlow()
+        MethodSpec methodSpec = MethodSpec.methodBuilder("getInstance")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(classNameObject)
+                .beginControlFlow("if (instance == null)")
+                .addCode("instance = new $T();\n", classNameObject)
+                .endControlFlow()
 
-        .addStatement("return instance")
-        .build();
+                .addStatement("return instance")
+                .build();
 
-TypeSpec typeSpec = TypeSpec.classBuilder(className)
-        .addModifiers(Modifier.PUBLIC)
-        .addField(fieldSpec)
-        .addMethod(methodSpec)
-        .build();
+        TypeSpec typeSpec = TypeSpec.classBuilder(classNameObject)
+                .addModifiers(Modifier.PUBLIC)
+                .addField(fieldSpec)
+                .addMethod(methodSpec)
+                .build();
 ```
 
 ###Path
